@@ -24,9 +24,9 @@ extern progressbar_t *updateProgBar;
 extern sprite_t* topInfoSpriteUpd;
 extern sprite_t* topInfoSprite;
 
-extern cwav_t* sfx_sound;
-extern cwav_t* lag_sound;
-extern cwav_t* cred_sound;
+extern CWAV* sfx_sound;
+extern CWAV* lag_sound;
+extern CWAV* cred_sound;
 
 aptHookCookie aptCookie;
 
@@ -149,7 +149,7 @@ int mainLauncher(void)
 	if (!isProperVer) {
 		if (!g_modversion[0]) {
 			changeTopSprite(2);
-			clearTop(false);
+			clearTop();
 			newAppTop(COLOR_RED, BOLD | MEDIUM | CENTER, "Fatal error");
 			newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nNo CTGP-7 files detected. Use the");
 			newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "CTGP-7 installer to fix the files.");
@@ -169,7 +169,7 @@ int mainLauncher(void)
 			changeTopFooter(updaterControlsText);
 			updaterControlsText->isHidden = false;
 			setControlsMode(2);
-			clearTop(false);
+			clearTop();
 			newAppTop(COLOR_RED, BOLD | MEDIUM | CENTER, "Version mismatch error");
 			newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "This app version is older");
 			newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "than a previous launched one.");
@@ -207,8 +207,8 @@ int mainLauncher(void)
 		finishUpdate();
 		forceUpdate = updateAvailable();
 		initMainMenu();
-		clearTop(false);
-		removeAppTop(false);
+		clearTop();
+		removeAppTop();
 		mainMenu();
 	}
 	exitMainMenu();
@@ -256,9 +256,9 @@ int mainInstaller(void)
 		zipSize = ftell(zipFile);
 		fclose(zipFile);
 	}
-	clearTop(false);
+	clearTop();
 	if (g_modversion[0]) {
-		clearTop(false);
+		clearTop();
 		newAppTop(COLOR_ORANGE, MEDIUM | BOLD | CENTER, "WARNING");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "Did you install the CTGP-7");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "installer by mistake?\n");
@@ -292,7 +292,7 @@ int mainInstaller(void)
 		}
 	}
 	if (continueInstall) {
-		clearTop(false);
+		clearTop();
 		newAppTop(DEFAULT_COLOR, BOLD | MEDIUM | CENTER, "CTGP-7 installer");
 		if (!g_modversion[0]) {
 			newAppTop(COLOR_GREEN, MEDIUM | CENTER, "\nStart with installation?\n");
@@ -313,7 +313,7 @@ int mainInstaller(void)
 				appTop->sprite = topInfoSprite;
 				u32 retlow = (u32)ret;
 				u32 rethigh = (u32)(ret >> 32);
-				clearTop(false);
+				clearTop();
 				if (!retlow) {
 					newAppTop(COLOR_GREEN, BOLD | MEDIUM | CENTER, "Installation successful!");
 					newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\n"FONT_B": Exit");

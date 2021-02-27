@@ -208,7 +208,7 @@ int     mainMenu(void)
 				V32Button->isGreyedOut = true;
 				V33Button->isGreyedOut = true;
 				pressExitSprite->isHidden = true;
-				bootntrMenu();
+				//bootntrMenu();
 				pressExitSprite->isHidden = false;
 				greyBottomScreen(false);
 				V32Button->isGreyedOut = false;

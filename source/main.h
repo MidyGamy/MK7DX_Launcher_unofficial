@@ -52,15 +52,23 @@ typedef uint8_t   u8;
 
 #define DEFAULT_MOD_PATH "/CTGP-7"
 #define FILE_DOWN_PREFIX "https://github.com/mariohackandglitch/CTGP-7updates/raw/master/updates/data"
+#define FULLMOD_DOWNLOAD_URL_CIA "https://ctgp7.page.link/cia_install"
+#define FULLMOD_DOWNLOAD_URL_3DSX  "https://ctgp7.page.link/3dsx_install"
+#define FULLMOD_DOWNLOAD_FINAL_CIA "/CTGP-7tmp/CTGP-7_Installer.cia"
+#define FULLMOD_DOWNLOAD_FINAL_3DSX  "/CTGP-7tmp/CTGP-7_Installer.3dsx"
+
 #define TOINSTALL_CIA_PATH "/CTGP-7/cia/tooInstall.cia"
 #define TOINSTALL_3DSX_PATH "/CTGP-7/cia/tooInstall.3dsx"
 #define FINAL_CIA_PATH "/CTGP-7/cia/CTGP-7.cia"
 #define TEMPORAL_3DSX_PATH "/CTGP-7/cia/CTGP-7.3dsx"
 #define FINAL_3DSX_PATH "/3ds/CTGP-7/CTGP-7.3dsx"
+#define FINAL_3DSX_INSTALLER_PATH "/3ds/CTGP-7/CTGP-7_Installer.3dsx"
 #define LAUNCH_OPT_SAVE "/CTGP-7/config/launchopt.bin"
 #define PLGLDR_TMP "/CTGP-7/tempboot.firm"
 #define PLGLDR_URL "https://raw.githubusercontent.com/mariohackandglitch/CTGP-7updates/master/luma/boot.firm"
+#define PLGLDR_PATH "romfs:/boot.firm"
 #define CTGP7_TID (0x0004000003070C00ULL)
+#define CIA_ALREADY_EXISTS 0xC8E083FC
 
 typedef struct  updateData_s
 {
@@ -182,7 +190,8 @@ char*	getProgText(float prog, int index);
 int		performUpdate(progressbar_t* progbar, bool* restartNeeded);
 FILE* fopen_mkdir(const char* name, const char* mode);
 void setControlsMode(int mode);
-
+void perform3dsxUpdate();
+int downloadModFromInternet(progressbar_t* progbar, bool get3dsx);
 /*
 ** updater_UI.c
 

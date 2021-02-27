@@ -15,7 +15,7 @@ u64 launchAppID = 0;
 FS_MediaType launchAppMedtype = 0xFF;
 bool alreadyCancelled = false;
 
-extern cwav_t                  *sfx_sound;
+extern CWAV                  *sfx_sound;
 
 
 typedef struct TitleWithUpd_s
@@ -122,7 +122,7 @@ bool checkPlgLdr() {
 		launchControlsSprite->isHidden = true;
 		bool updatelumaloop = true;
 		u32 keys = 0;
-		clearTop(false);
+		clearTop();
 		newAppTop(COLOR_RED, BOLD | MEDIUM | CENTER, "Cannot launch CTGP-7");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nLuma3DS with plugin loader");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "is not installed. Would you");
@@ -141,7 +141,7 @@ bool checkPlgLdr() {
 				if (updret != 0) {
 					bool performupdatelumaloop = true;
 					int keys2 = 0;
-					clearTop(false);
+					clearTop();
 					newAppTop(COLOR_RED, BOLD | MEDIUM | CENTER, "Cannot launch CTGP-7");
 					newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nLuma3DS with plugin loader");
 					newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "failed to download. Please,");
@@ -160,7 +160,7 @@ bool checkPlgLdr() {
 					}
 				}
 				else {
-					clearTop(false);
+					clearTop();
 					newAppTop(COLOR_LIMEGREEN, BOLD | MEDIUM | CENTER, "Update succeded!");
 					newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nThe console will reboot.\n");
 					newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, FONT_B": Exit");
@@ -169,7 +169,7 @@ bool checkPlgLdr() {
 					while (performupdatelumaloop && aptMainLoop()) {
 						if (keys2 & KEY_B) {
 							PLAYBOOP();
-							clearTop(false);
+							clearTop();
 							changeTopSprite(0);
 							greyExit();
 							updateUI();
@@ -359,7 +359,7 @@ bool drawLaunchText(TitleWithUpd_t** opts, int curropt, bool gameCard, int total
 	u32 ver;
 	bool ret1 = false;
 	bool ret2 = false;
-	clearTop(false);
+	clearTop();
 	newAppTop(DEFAULT_COLOR, CENTER | MEDIUM | BOLD, "Select game to launch");
 	newAppTop(DEFAULT_COLOR, CENTER | MEDIUM, "Option %d / %d", curropt + 1, totalOpt);
 	if (curropt == 0 && gameCard) {
@@ -427,8 +427,8 @@ void launchMod() {
 	appTop->sprite = topInfoSpriteUpd;
 	changeTopFooter(launchControlsSprite);
 	if (!checkPlgLdr()) {
-		clearTop(false);
-		removeAppTop(false);
+		clearTop();
+		removeAppTop();
 		changeTopFooter(NULL); 
 		appTop->sprite = topInfoSprite;
 		return;
@@ -440,7 +440,7 @@ void launchMod() {
 	if (!gameListCount) {
 		bool errorloop = true;
 		u32 keys = 0;
-		clearTop(false);
+		clearTop();
 		newAppTop(COLOR_RED, MEDIUM | BOLD | CENTER, "Failed to launch CTGP-7");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "Mario Kart 7 was not detected.");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nIf you are playing");
@@ -456,8 +456,8 @@ void launchMod() {
 				errorloop = false;
 			}
 		}
-		clearTop(false);
-		removeAppTop(false);
+		clearTop();
+		removeAppTop();
 		freeGameList(gameList);
 		changeTopFooter(NULL);
 		return;
@@ -539,8 +539,8 @@ void launchMod() {
 			}
 		}
 	}
-	clearTop(false);
-	removeAppTop(false);
+	clearTop();
+	removeAppTop();
 	free(opts);
 	freeGameList(gameList);
 	changeTopFooter(NULL);
