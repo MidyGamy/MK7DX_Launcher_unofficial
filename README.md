@@ -2,6 +2,8 @@
 Launcher app used with CTGP-7 to launch the mod. This repository also has a modification of the plugin loader used in the Luma3DS with plugin loading support fork but specific for MK7 title IDs. If you came here only for the plugin loader I recommend checking that repository instead.
 
 # Building
+This has been uploaded for archive and reference purposes. The latest commit may need some modifications so it can be compiled properly.
+
 Building CTGP-7 Launcher is handled through buildtools. You have to have the following installed:
 - [devkitPro with devkitARM](https://sourceforge.net/projects/devkitpro/files/Automated%20Installer/)
 - ctrulib (installed automatically with the devkitARM script)

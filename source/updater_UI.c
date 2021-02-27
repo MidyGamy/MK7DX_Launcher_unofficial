@@ -8,9 +8,9 @@ sprite_t *progBarSprite = NULL;
 sprite_t *progBarFillSprite = NULL;
 progressbar_t *updateProgBar = NULL;
 
-extern char* versionList[50];
+extern char* versionList[100];
 extern char g_modversion[15];
-extern char* changelogList[50][30];
+extern char* changelogList[100][100];
 
 extern appInfoObject_t         *appTop;
 extern sprite_t         *topInfoSprite;
@@ -19,8 +19,7 @@ extern sprite_t		 *topInfoSpriteUpd;
 extern bool restartneeded;
 extern bool forceUpdate;
 
-extern cwav_t                  *sfx_sound;
-extern cwav_t                  *lag_sound;
+extern bool g_ciaInstallFailed; 
 
 void    InitUpdatesUI(void)
 {	
@@ -64,8 +63,8 @@ void setControlsMode(int mode) {
 void ExitUpdatesUI(void) {
 	changeTopFooter(NULL);
 	changeTopSprite(0);
-	clearTop(false);
-	removeAppTop(false);
+	clearTop();
+	removeAppTop();
 }
 
 void clearUpdateSprites() {
@@ -80,7 +79,7 @@ void clearUpdateSprites() {
 }
 
 void drawUpdateText(int version, int page, int totpage) {
-	clearTop(false);
+	clearTop();
 	newAppTop(DEFAULT_COLOR, MEDIUM | BOLD | CENTER, "Ver. %s - Page %d/%d", versionList[version], page + 1, totpage);
 	for (int i = 0; i < 10; i++) {
 		if (changelogList[version][i + 10 * page] != NULL) {
@@ -104,7 +103,7 @@ void UpdaterMenuLoop() {
 	if (versionList[0] == NULL) {
 		newAppTop(DEFAULT_COLOR, MEDIUM | BOLD | CENTER, "Getting Update Info...");
 		updateUI();
-		removeAppTop(false);
+		removeAppTop();
 		if (!downloadChangelog()) {
 			newAppTop(COLOR_RED, MEDIUM | BOLD | CENTER, "Couldn't get update info.");
 			newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "Error info:");
@@ -185,7 +184,7 @@ void UpdaterMenuLoop() {
 						errorLoop = false;
 						PLAYBOOP();
 					}
-					clearTop(false);
+					clearTop();
 					if ((ret & 0xFF) == 0x3) {
 						newAppTop(COLOR_RED, MEDIUM | BOLD | CENTER, "Update Failed");
 						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "Couldn't get version info.");
@@ -194,6 +193,7 @@ void UpdaterMenuLoop() {
 						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nYou can ask for help in the");
 						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "CTGP-7 discord server.");
 					} else if (ret) {
+						restartneeded = true;
 						newAppTop(COLOR_RED, MEDIUM | BOLD | CENTER, "Update Failed");
 						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nThe update failed with");
 						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "the following error code:");
@@ -202,10 +202,21 @@ void UpdaterMenuLoop() {
 						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "CTGP-7 discord server.");
 					}
 					else {
-						newAppTop(COLOR_GREEN, MEDIUM | BOLD | CENTER, "Update Succeded");
-						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nUpdated to %s", versionList[totver - 1]);
-						if (restartneeded) {
-							newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nThe app will restart.");
+						if (g_ciaInstallFailed) {
+							newAppTop(COLOR_ORANGE, MEDIUM | BOLD | CENTER, "Update Incomplete");
+							newAppTop(COLOR_YELLOW, MEDIUM | CENTER, "CIA file might have");
+							newAppTop(COLOR_YELLOW, MEDIUM | CENTER, "failed to install.\n");
+							newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "Please install the");
+							newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "following CIA file:");
+							newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "SD:"FINAL_CIA_PATH);
+							newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "to prevent issues.");
+						}
+						else {
+							newAppTop(COLOR_GREEN, MEDIUM | BOLD | CENTER, "Update Succeded");
+							newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nUpdated to %s", versionList[totver - 1]);
+							if (restartneeded) {
+								newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nThe app will restart.");
+							}
 						}
 						forceUpdate = false;
 					}

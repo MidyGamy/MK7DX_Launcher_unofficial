@@ -5,9 +5,6 @@
 
 static credits_t g_credits = { 0 };
 static u32 g_creditColors[] = { DEFAULT_COLOR, COLOR_BLUE, COLOR_GREEN, COLOR_ORANGE, COLOR_RED, COLOR_YELLOW, COLOR_LIMEGREEN, COLOR_CYAN, COLOR_FUCHSIA, COLOR_SILVER };
-extern cwav_t* cred_sound;
-extern cwav_t* lag_sound;
-extern cwav_t* sfx_sound;
 extern sprite_t* creditsText;
 extern sprite_t *updaterControlsText;
 extern appInfoObject_t         *appTop;
@@ -128,13 +125,13 @@ void initCreditsResources() {
 	static bool resourcesLoaded = false;
 	if (resourcesLoaded) return;
 	resourcesLoaded = true;
-	newCwav("romfs:/sound/credits.bcwav", &cred_sound);
+	//cred_sound = cwavLoadFromFile("romfs:/sound/credits.bcwav", 1);
 	newSpriteFromPNG(&creditsText, "romfs:/sprites/textSprites/creditsText.png");
 	setSpritePos(creditsText, 150.f, 0.f);
 }
 
 void freeCreditsResources() {
-	if (cred_sound) freeCwav(cred_sound);
+	if (cred_sound) cwavFree(cred_sound);
 	if (creditsText) deleteSprite(creditsText);
 	freeCredits();
 	creditsText = NULL;
@@ -142,7 +139,7 @@ void freeCreditsResources() {
 }
 
 void drawCreditsText(int pageid, int totentries) {
-	clearTop(false);
+	clearTop();
 	bool isName = pageid % 2 == 0;
 	pageid >>= 1;
 	newAppTop(DEFAULT_COLOR, MEDIUM | BOLD | CENTER, "Page %d/%d", pageid + 1, (int)ceil(totentries / 10.f));
@@ -159,7 +156,7 @@ void creditsLoop() {
 	int totpages = (int)ceil(totentries / 10.f);
 	int currentry = 0;
 	if (totentries == 0) {
-		clearTop(false);
+		clearTop();
 		newAppTop(COLOR_ORANGE, MEDIUM | BOLD | CENTER, "Couldn't download credits.");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "Error info:");
 		newAppTopMultiline(DEFAULT_COLOR, SMALL | CENTER, CURL_lastErrorCode);
@@ -184,7 +181,7 @@ void creditsLoop() {
 				if (currentry % 2 == 0) shuffle_colors(g_creditColors, sizeof(g_creditColors) / sizeof(u32));
 				drawCreditsText(currentry, totentries >> 1);
 				currentry++;
-				if (currentry >= totpages + 1) currentry = 0;
+				if (currentry >= totpages) currentry = 0;
 			}
 			if (key & KEY_B) {
 				creditsloop = false;
@@ -201,13 +198,13 @@ void creditsMenu() {
 	STARTLAG();
 	getParseCredits();
 	STOPLAG();
-	clearTop(false);
+	clearTop();
 	changeTopSprite(4);
 	setControlsMode(2);
 	changeTopFooter(updaterControlsText);
 	appTop->sprite = topInfoSprite;
 	creditsLoop();
-	clearTop(false);
+	clearTop();
 	changeTopSprite(0);
 	setControlsMode(0);
 	changeTopFooter(NULL);

@@ -30,11 +30,9 @@ extern bool restartneeded;
 extern u64 launchAppID;
 extern FS_MediaType launchAppMedtype;
 
-cwav_t                  *sfx_sound = NULL;
-cwav_t					*lag_sound = NULL;
-cwav_t					*cred_sound = NULL;
-
-
+CWAV					*sfx_sound = NULL;
+CWAV					*lag_sound = NULL;
+CWAV					*cred_sound = NULL;
 
 static u32 getNextRbwColor(u32 counter) {
 	#define RNBW_FREQ 0.05235987755
@@ -65,6 +63,7 @@ void greyExit() {
 
 void    selectVersion(u32 mode)
 {
+	if (optionSelected) return;
 	if (userTouch && !optionSelected) return;
 	PLAYBEEP();
 	V32Button->disable(V32Button);
@@ -108,8 +107,8 @@ void    exitMainMenu(void)
 	tinyButtonBGSprite = NULL;
 	pressExitSprite = NULL;
 	clearUpdateSprites();
-	freeCwav(sfx_sound);
-	freeCwav(lag_sound);
+	cwavFree(sfx_sound);
+	cwavFree(lag_sound);
 	freeCreditsResources();
 }
 
@@ -118,8 +117,7 @@ int     mainMenu(void)
     u32         keys;
 	u32			exitkey;
 
-    waitAllKeysReleased();
-    appInfoDisableAutoUpdate();  
+    //waitAllKeysReleased();
     keys = 0;
 	exitkey = 0;
 	u32 framecount = 0;
@@ -157,6 +155,9 @@ int     mainMenu(void)
 		}
 		else if (exitkey & KEY_Y) {
 			selectVersion(3);
+		}
+		else if (exitkey & KEY_X) {
+			selectVersion(4);
 		}
 		updateUI();
 		keys = hidKeysDown() | hidKeysHeld();
@@ -201,6 +202,18 @@ int     mainMenu(void)
 				greyBottomScreen(false);
 				V32Button->isGreyedOut = false;
 				V33Button->isGreyedOut = false;
+				break;
+			case 4:
+				greyBottomScreen(true);
+				V32Button->isGreyedOut = true;
+				V33Button->isGreyedOut = true;
+				pressExitSprite->isHidden = true;
+				bootntrMenu();
+				pressExitSprite->isHidden = false;
+				greyBottomScreen(false);
+				V32Button->isGreyedOut = false;
+				V33Button->isGreyedOut = false;
+				break;
 			default:
 				break;
 			}
@@ -208,11 +221,12 @@ int     mainMenu(void)
 			V33Button->enable(V33Button);
 			optionSelected = false;
 			optionTodo = 0xFF;
+			exitkey = keys = 0;
 			hidScanInput();
 		}
     }
 	greyExit();
 	updateUI();
-	svcSleepThread(500000000);
+	svcSleepThread(1000000000);
 	return (1);
 }

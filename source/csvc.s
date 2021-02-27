@@ -59,7 +59,10 @@ SVC_BEGIN svcInvalidateEntireInstructionCache
 SVC_END
 
 SVC_BEGIN svcMapProcessMemoryEx
+    str r4, [sp, #-4]!
+    ldr r4, [sp, #4]
     svc 0xA0
+    ldr r4, [sp], #4
     bx lr
 SVC_END
 
@@ -76,6 +79,19 @@ SVC_BEGIN svcControlMemoryEx
     svc  0xA2
     pop  {r2, r4, r5}
     str  r1, [r2]
+    bx   lr
+SVC_END
+
+SVC_BEGIN svcControlMemoryUnsafe
+    str r4, [sp, #-4]!
+    ldr r4, [sp, #4]
+    svc 0xA3
+    ldr r4, [sp], #4
+    bx lr
+SVC_END
+
+SVC_BEGIN svcFreeMemory
+    svc  0xA3
     bx   lr
 SVC_END
 
@@ -100,10 +116,7 @@ SVC_BEGIN svcTranslateHandle
     bx lr
 SVC_END
 
-.global backdoorHandler
-.type backdoorHandler, %function    
-backdoorHandler:
-cpsid   aif
-STMFD   SP!, {R3-R11,LR}
-bl      kernelCallback
-LDMFD   SP!, {R3-R11,PC}
+SVC_BEGIN svcControlProcess
+    svc 0xB3
+    bx lr
+SVC_END

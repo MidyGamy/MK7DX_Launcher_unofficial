@@ -83,11 +83,9 @@ typedef u32 screenPos_t;
 
 void        drawInit(void);
 void        drawExit(void);
-void        drawEndFrame(void);
 void        getTextSizeInfos(float *width, float scaleX, float scaleY, const char *text);
 void        setTextColor(u32 color);
 void        renderText(float x, float y, float scaleX, float scaleY, bool baseline, const char *text, cursor_t *cursor, float depth);
-void        drawText(screenPos_t pos, float size, u32 color, char *text, ...);
 void        findBestSize(float *sizeX, float *sizeY, float posXMin, float posXMax, float sizeMax, const char *text);
 void        setScreen(gfxScreen_t screen);
 void        updateScreen(void);

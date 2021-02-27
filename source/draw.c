@@ -10,7 +10,6 @@ static drawTarget_t     top;
 static drawTarget_t     bottom;
 static bool             frameStarted = false;
 static gfxScreen_t      currentScreen = -1;
-static cursor_t         cursor[2] = { { 10, 10 },{ 10, 10 } };
 
 #define TEXT_VTX_ARRAY_COUNT (8 * 1024)
 
@@ -39,17 +38,6 @@ static void addTextVertex(float vx, float vy, float vz, float tx, float ty)
     vtx->position[2] = 0.0f;
     vtx->texcoord[0] = tx;
     vtx->texcoord[1] = ty;
-}
-
-void printVertex(textVertex_s *vtx)
-{
-    printf("Vtx: pos[0] %f, pos[1] %f pos[2] %f, tx[0] %f, tx[1] %f\n",
-        vtx->position[0],
-        vtx->position[1],
-        vtx->position[2],
-        vtx->texcoord[0],
-        vtx->texcoord[1]
-        );
 }
 
 static void resetC3Denv() {
@@ -134,6 +122,7 @@ void drawSprite(sprite_t *sprite)
     float       y;
     int         arrayIndex;
     C3D_Tex     *texture;
+    if (!frameStarted) return;
 
     if (!sprite || sprite->isHidden) return;
     texture = &sprite->texture;
@@ -177,6 +166,8 @@ void drawRectangle(rectangle_t *rectangle)
 	float       y;
 	int         arrayIndex;
 	C3D_TexEnv  *env;
+
+    if (!frameStarted) return;
 
 	if (!rectangle) return;
 	height = rectangle->height;
@@ -279,12 +270,12 @@ static void sceneInit(void)
     C3D_DepthTest(true, GPU_GEQUAL, GPU_WRITE_ALL);
 
     // Load the glyph texture sheets
-    glyphInfo = fontGetGlyphInfo();
+    glyphInfo = fontGetGlyphInfo(NULL);
     glyphSheets = malloc(sizeof(C3D_Tex) * glyphInfo->nSheets);
     for (i = 0; i < glyphInfo->nSheets; i++)
     {
         tex = &glyphSheets[i];
-        tex->data = fontGetGlyphSheetTex(i);
+        tex->data = fontGetGlyphSheetTex(NULL, i);
         tex->fmt = glyphInfo->sheetFmt;
         tex->size = glyphInfo->sheetSize;
         tex->width = glyphInfo->sheetWidth;
@@ -332,15 +323,6 @@ void drawInit(void)
     sceneInit();
 }
 
-void drawEndFrame(void)
-{
-    if (frameStarted)
-    {
-        C3D_FrameEnd(0);
-        frameStarted = false;
-    }
-}
-
 void drawExit(void)
 {
     sceneExit();
@@ -384,8 +366,8 @@ void getTextSizeInfos(float *width, float scaleX, float scaleY, const char *text
         c += units;
         if (code > 0)
         {
-            glyphIndex = fontGlyphIndexFromCodePoint(code);
-            fontCalcGlyphPos(&data, glyphIndex, GLYPH_POS_CALC_VTXCOORD, scaleX, scaleY);
+            glyphIndex = fontGlyphIndexFromCodePoint(NULL, code);
+            fontCalcGlyphPos(&data, NULL, glyphIndex, GLYPH_POS_CALC_VTXCOORD, scaleX, scaleY);
             w += data.xAdvance;
         }
     } while (code > 0);
@@ -430,6 +412,7 @@ void renderText(float x, float y, float scaleX, float scaleY, bool baseline, con
     C3D_BufInfo     *bufInfo;
     fontGlyphPos_s  data;
     const u8        *p = (const u8 *)text;
+    if (!frameStarted) return;
 
     // Configure buffers
     bufInfo = C3D_GetBufInfo();
@@ -449,12 +432,12 @@ void renderText(float x, float y, float scaleX, float scaleY, bool baseline, con
         if (code == '\n')
         {
             x = firstX;
-            y += scaleY * fontGetInfo()->lineFeed;
+            y += scaleY * fontGetInfo(NULL)->lineFeed;
         }
         else if (code > 0)
         {
-            glyphIdx = fontGlyphIndexFromCodePoint(code);
-            fontCalcGlyphPos(&data, glyphIdx, flags, scaleX, scaleY);
+            glyphIdx = fontGlyphIndexFromCodePoint(NULL, code);
+            fontCalcGlyphPos(&data, NULL, glyphIdx, flags, scaleX, scaleY);
 
             // Bind the correct texture sheet
             if (data.sheetIndex != lastSheet)
@@ -487,46 +470,25 @@ void renderText(float x, float y, float scaleX, float scaleY, bool baseline, con
     }
 }
 
-void drawText(screenPos_t pos, float size, u32 color, char *text, ...)
-{
-    char        buf[4096];
-    va_list     vaList;
-    float       posX;
-    float       posY;
-    
-    if (!frameStarted) return;
-    posX = POS_X(pos);
-    posY = POS_Y(pos);
-    va_start(vaList, text);
-    setTextColor(color);
-    vsnprintf(buf, 4096, text, vaList);
-    renderText(posX, posY, size, size, false, buf, NULL, 0.0f);
-    va_end(vaList);
-
-}
-
 void updateScreen(void)
 {
-    if (frameStarted)
+    if (frameStarted) {
         C3D_FrameEnd(0);
-    else
-        frameStarted = true;
-    C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
+        frameStarted = false;
+    }
     textVtxArrayPos = 0;
-    cursor[0] = (cursor_t){ 10, 10 };
-    cursor[1] = (cursor_t){ 10, 10 };
     currentScreen = -1;
 }
 
 void setScreen(gfxScreen_t screen)
 {
-    if (screen == currentScreen) return;
-    currentScreen = screen;
     if (!frameStarted)
     {
         C3D_FrameBegin(C3D_FRAME_SYNCDRAW);
         frameStarted = true;
     }
+    if (screen == currentScreen) return;
+    currentScreen = screen;
     if (screen == GFX_TOP)
     {
         C3D_FrameDrawOn(top.target);
@@ -539,42 +501,3 @@ void setScreen(gfxScreen_t screen)
     }
     else return;
 }
-/*
-void Printf(u32 color, u32 flags, char *text, ...)
-{
-    //TODO: Find the best size for BOLD and SKINNY
-    char        buf[4096];
-    va_list     vaList;
-    float       posX;
-    float       posY;
-    float       sizeX;
-    float       sizeY;
-
-    if (flags)
-    {
-        //Set the font size
-        if (flags & BIG) sizeX = sizeY = 1.0f;
-        else if (flags & SMALL) sizeX = sizeY = 0.35f;
-        else sizeX = sizeY = 0.5f;
-        //Set a style
-        if (flags & BOLD)
-        {
-            sizeX = 0.75f;
-            sizeY = 0.5f;
-        }
-        else if (flags & SKINNY)
-        {
-            sizeX = 0.5f;
-            sizeY = 0.75f;
-        }
-    }
-    else
-        sizeX = sizeY = 0.5f;
-    va_start(vaList, text);
-    vsnprintf(buf, 4096, text, vaList);
-    posX = cursor[currentScreen].posX;
-    posY = cursor[currentScreen].posY;
-    setTextColor(color);
-    renderText(posX, posY, sizeX, sizeY, false, buf, &cursor[currentScreen]);
-    va_end(vaList);
-}*/

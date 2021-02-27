@@ -211,7 +211,6 @@ int mainLauncher(void)
 		removeAppTop(false);
 		mainMenu();
 	}
-	drawEndFrame();
 	exitMainMenu();
 	exitUI();
 	drawExit();
@@ -367,7 +366,6 @@ int mainInstaller(void)
 	updateUI();
 	svcSleepThread(500000000);
 
-	drawEndFrame();
 	exitMainMenu();
 	exitUI();
 	drawExit();

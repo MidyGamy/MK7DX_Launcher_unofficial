@@ -23,9 +23,6 @@ extern char g_modversion[15];
 
 char textVersion[20] = { 0 };
 
-extern cwav_t* sfx_sound;
-extern cwav_t* lag_sound;
-
 void    initUI(void)
 {
     backgroundScreen_t *bg;
@@ -58,8 +55,8 @@ void    initUI(void)
     appTop = newAppInfoObject(topInfoSprite, 14, 58.0f, 30.0f);
     appInfoSetTextBoundaries(appTop, 343.0f, 220.0f);
 
-	newCwav("romfs:/sound/beepboopclick.bcwav", &sfx_sound);
-	newCwav("romfs:/sound/lag.bcwav", &lag_sound);
+    //sfx_sound = cwavLoadFromFile("romfs:/sound/beepboopclick.bcwav", 3);
+    //lag_sound = cwavLoadFromFile("romfs:/sound/lag.bcwav", 1);
 }
 
 void changeTopSprite(int id) {
@@ -97,8 +94,9 @@ static inline void drawUITop(void)
     setScreen(GFX_TOP);
     
     topScreen->draw(topScreen);
-    setTextColor(COLOR_BLANK);
+    
 	if (g_modversion[0]) {
+        setTextColor(COLOR_BLANK);
 		if (textVersion[0] == '\0') {
 			sprintf(textVersion, "Ver. %s", g_modversion);
 		}
@@ -118,7 +116,6 @@ int   updateUI(void)
 {
     hidScanInput();
     drawUITop();
-	
     drawUIBottom();
     updateScreen();
     return (1);

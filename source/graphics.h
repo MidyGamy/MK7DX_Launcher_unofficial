@@ -26,8 +26,8 @@ extern appInfoObject_t  *appBottom;
 
 #define newAppTop(...) newAppInfoEntry(appTop, __VA_ARGS__)
 #define newAppTopMultiline(color, flags, text) drawMultilineText(color, flags, text)
-#define removeAppTop(update) removeAppInfoEntry(appTop, update)
-#define clearTop(update)    clearAppInfo(appTop, update)
+#define removeAppTop() removeAppInfoEntry(appTop)
+#define clearTop()    clearAppInfo(appTop)
 
 #define TRACE() {newAppTop(DEFAULT_COLOR, SMALL, "%s:%d",__FUNCTION__, __LINE__); svcSleepThread(1000000000); updateUI(); svcSleepThread(1000000000);}
 #define XTRACE(str, ...) {newAppTop(DEFAULT_COLOR, SMALL, str, __VA_ARGS__); updateUI(); svcSleepThread(500000000);}  

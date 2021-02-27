@@ -1,19 +1,8 @@
 #include "appInfo.h"
 #include "graphics.h"
 
-static bool autoUpdate = false;
 static bool showBackground = true;
 extern appInfoObject_t  *appTop;
-
-void    appInfoDisableAutoUpdate(void)
-{
-    autoUpdate = false;
-}
-
-void    appInfoEnableAutoUpdate(void)
-{
-    autoUpdate = true;
-}
 
 void    appInfoHideBackground(void)
 {
@@ -127,8 +116,6 @@ void newAppInfoEntry(appInfoObject_t *object, u32 color, u32 flags, char *text, 
     entry->flags = flags;
     entryList[entryCount] = (u32)entry;
     object->entryCount++;
-    if (autoUpdate)
-        updateUI();
 exit:
     return;
 }
@@ -151,14 +138,12 @@ exit:
 
 }
 
-void    removeAppInfoEntry(appInfoObject_t *object, bool update)
+void    removeAppInfoEntry(appInfoObject_t *object)
 {
     deleteLastEntry(object);
-    if (update)
-        updateUI();
 }
 
-void    clearAppInfo(appInfoObject_t *object, bool updateScreen)
+void    clearAppInfo(appInfoObject_t *object)
 {
     u32     entryCount;
     int     i;
@@ -166,8 +151,6 @@ void    clearAppInfo(appInfoObject_t *object, bool updateScreen)
     entryCount = object->entryCount;
     for (i = entryCount; i > 0; i--)
         deleteLastEntry(object);
-    if (updateScreen)
-        updateUI();
 }
 
 void drawMultilineText(u32 color, u32 flags, char* txt) {
@@ -266,7 +249,7 @@ static void getDrawParameters(appInfoObject_t *object, int index, float *sizeX, 
     }
 
     if (flags & NEWLINE)
-        cursor->posY += 0.3f * fontGetInfo()->lineFeed;
+        cursor->posY += 0.3f * fontGetInfo(NULL)->lineFeed;
     
     //Return the size
     *sizeX = scaleX;
@@ -285,12 +268,12 @@ void    drawAppInfoEntry(appInfoObject_t  *object, int index)
     cursor = &object->cursor;
     sizeX = sizeY = 0.0f;
     getDrawParameters(object, index, &sizeX, &sizeY);
-    lineFeed = sizeY * fontGetInfo()->lineFeed;
+    lineFeed = sizeY * fontGetInfo(NULL)->lineFeed;
     setTextColor(entry->color);
     renderText(cursor->posX, cursor->posY, sizeX, sizeY, false, entry->buffer, cursor, 0.0f);
     cursor->posY += lineFeed;
 exit:
-    return;
+    return; 
 }
 
 void    drawAppInfo(appInfoObject_t *object)
