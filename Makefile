@@ -13,7 +13,7 @@ endif
 # COMMON CONFIGURATION #
 
 
-LAUNCHER_M = 0
+LAUNCHER_M = 1
 
 ifeq ($(LAUNCHER_M), 1)
 	NAME := MK7DX
