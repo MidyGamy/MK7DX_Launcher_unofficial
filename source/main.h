@@ -69,7 +69,7 @@ typedef uint8_t   u8;
 #define PLGLDR_TMP "/MK7DX/tempboot.firm"
 #define PLGLDR_URL "https://raw.githubusercontent.com/MidyGamy/MK7DX-updates-unofficial/master/luma/boot.firm"
 #define PLGLDR_PATH "romfs:/boot.firm"
-#define MK7DX_TID (0x000400000138F700ULL)
+#define MK7DX_TID (0x000400000AFC2100ULL)
 #define CIA_ALREADY_EXISTS 0xC8E083FC
 
 typedef struct  updateData_s

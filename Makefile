@@ -28,8 +28,8 @@ SOURCE_DIRS := source source/json source/allocator
 
 EXTRA_OUTPUT_FILES :=
 
-LIBRARY_DIRS := $(PORTLIBS) $(CTRULIB) $(DEVKITPRO)/libcwav
-LIBRARIES := citro3d ctru png z m curl mbedtls mbedx509 mbedcrypto cwav
+LIBRARY_DIRS := $(PORTLIBS) $(CTRULIB) $(DEVKITPRO)/libcwav $(DEVKITPRO)/libncsnd
+LIBRARIES := citro3d ctru png z m curl mbedtls mbedx509 mbedcrypto cwav ncsnd
 
 ifeq ($(LAUNCHER_M), 1)
 	VERSION_MAJOR := 1
