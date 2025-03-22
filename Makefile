@@ -16,9 +16,9 @@ endif
 LAUNCHER_M = 1
 
 ifeq ($(LAUNCHER_M), 1)
-	NAME := CTGP-7
+	NAME := MK7DX
 else 
-	NAME := CTGP-7_Installer
+	NAME := MK7DX_Installer
 endif
 
 BUILD_DIR := build
@@ -59,7 +59,7 @@ RUN_FLAGS :=
 # 3DS/Wii U CONFIGURATION #
 
 ifeq ($(TARGET),$(filter $(TARGET),3DS WIIU))
-	TITLE := CTGP-7
+	TITLE := MK7DX
 	ifeq ($(LAUNCHER_M), 1)
 		DESCRIPTION := Launcher & Updater
 	else 
@@ -74,7 +74,7 @@ ifeq ($(TARGET),3DS)
     LIBRARY_DIRS += $(DEVKITPRO)/libctru $(DEVKITPRO)/portlibs/3ds/
     LIBRARIES += citro3d ctru png z m curl mbedtls mbedx509 mbedcrypto
 
-    PRODUCT_CODE := CTR-P-CTGP
+    PRODUCT_CODE := CTR-P-MK7DX
     UNIQUE_ID := 0x3070C
 
     CATEGORY := Application

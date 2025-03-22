@@ -326,7 +326,7 @@ int downloadFile(char* URL, char* filepath, progressbar_t* progbar) {
 			curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, FILE_ALLOC_SIZE);
 			curl_easy_setopt(hnd, CURLOPT_URL, URL);
 			curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 0L);
-			curl_easy_setopt(hnd, CURLOPT_USERAGENT, "Mozilla/5.0 (Nintendo 3DS; U; ; en) AppleWebKit/536.30 (KHTML, like Gecko) CTGP-7/1.0 CTGP-7/1.0");
+			curl_easy_setopt(hnd, CURLOPT_USERAGENT, "Mozilla/5.0 (Nintendo 3DS; U; ; en) AppleWebKit/536.30 (KHTML, like Gecko) MK7DX/1.0 MK7DX/1.0");
 			curl_easy_setopt(hnd, CURLOPT_FOLLOWLOCATION, 1L);
 			curl_easy_setopt(hnd, CURLOPT_FAILONERROR, 1L);
 			curl_easy_setopt(hnd, CURLOPT_ACCEPT_ENCODING, "gzip");
@@ -462,7 +462,7 @@ int downloadString(char* URL, char** out) {
 	curl_easy_setopt(hnd, CURLOPT_BUFFERSIZE, 102400L);
 	curl_easy_setopt(hnd, CURLOPT_URL, URL);
 	curl_easy_setopt(hnd, CURLOPT_NOPROGRESS, 1L);
-	curl_easy_setopt(hnd, CURLOPT_USERAGENT, "Mozilla/5.0 (Nintendo 3DS; U; ; en) AppleWebKit/536.30 (KHTML, like Gecko) CTGP-7/1.0 CTGP-7/1.0");
+	curl_easy_setopt(hnd, CURLOPT_USERAGENT, "Mozilla/5.0 (Nintendo 3DS; U; ; en) AppleWebKit/536.30 (KHTML, like Gecko) MK7DX/1.0 MK7DX/1.0");
 	curl_easy_setopt(hnd, CURLOPT_FOLLOWLOCATION, 1L);
 	curl_easy_setopt(hnd, CURLOPT_ACCEPT_ENCODING, "gzip");
 	curl_easy_setopt(hnd, CURLOPT_FAILONERROR, 1L);
@@ -511,7 +511,7 @@ bool downloadChangelog() {
 	int index1 = 0;
 	int index2 = 0;
 
-	int retcode = downloadString("https://raw.githubusercontent.com/mariohackandglitch/CTGP-7updates/master/updates/changeloglist", &downstr);
+	int retcode = downloadString("https://raw.githubusercontent.com/MidyGamy/MK7DX-updates-unofficial/master/updates/changeloglist", &downstr);
 	if (retcode || downstr == NULL) {
 		if (downstr) {
 			free(downstr);
@@ -549,8 +549,9 @@ bool downloadChangelog() {
 bool updateAvailable() {
 	if (!isWifiAvailable()) return false;
 	char* downstr = NULL;
-	int retcode = downloadString("http://bit.ly/ctgp7_latest", &downstr);
-	//NOTE: bit.ly is used to know how many people use the mod and from which country they are. This data helps CTGP-7 devs to know the most used languages, the amount of people playing, etc.. This data is not shared with anyone and is anonymus (IPs not registered) 
+	//int retcode = downloadString("http://bit.ly/MK7DX_latest", &downstr);
+	int retcode = downloadString("https://raw.githubusercontent.com/MidyGamy/MK7DX-updates-unofficial/master/updates/latestver", &downstr);
+	//NOTE: bit.ly is used to know how many people use the mod and from which country they are. This data helps MK7DX devs to know the most used languages, the amount of people playing, etc.. This data is not shared with anyone and is anonymus (IPs not registered) 
 	if (retcode || downstr == NULL) {
 		if (downstr) {
 			free(downstr);
@@ -610,7 +611,7 @@ static inline void freeFileInfo(downFileInfo_t** fileInfo) {
 
 static void writeFaultyURL(char* URL) {
 	if (!URL) return;
-	FILE* tmpfl = fopen("/CTGP-7/failedURL.txt", "w");
+	FILE* tmpfl = fopen("/MK7DX/failedURL.txt", "w");
 	fwrite(URL, 1, strlen(URL), tmpfl);
 	fclose(tmpfl);
 }
@@ -641,13 +642,13 @@ int updateLuma3DS(progressbar_t* progbar) {
 }
 
 int downloadModFromInternet(progressbar_t* progbar, bool get3dsx) {
-	strcpy(updatingVer, "CTGP-7 Downloader");
+	strcpy(updatingVer, "MK7DX Downloader");
 	totFileDownCnt = 1;
 	fileDownCnt = 1;
 	progbar->rectangle->amount = 0;
 	progbar->isHidden = false;
 	DisableSleep();
-	int retcode = downloadFile(get3dsx ? FULLMOD_DOWNLOAD_URL_3DSX : FULLMOD_DOWNLOAD_URL_CIA, "/CTGP-7tmp/CTGP-7.zip", progbar);
+	int retcode = downloadFile(get3dsx ? FULLMOD_DOWNLOAD_URL_3DSX : FULLMOD_DOWNLOAD_URL_CIA, "/MK7DX-tmp/MK7DX.zip", progbar);
 	EnableSleep();
 	progbar->isHidden = true;
 	updatingVer[0] = '\0';
@@ -711,7 +712,7 @@ int performUpdate(progressbar_t* progbar, bool* restartNeeded) {
 		char* downstr = NULL;
 		if (!URL) URL = malloc(200);
 		int filecount = 0; 
-		sprintf(URL, "https://github.com/mariohackandglitch/CTGP-7updates/releases/download/v%s/filelist.txt", versionList[index]);
+		sprintf(URL, "https://github.com/MidyGamy/MK7DX-updates-unofficial/releases/download/v%s/filelist.txt", versionList[index]);
 		int retcode = downloadString(URL, &downstr); 
 		
 		if (retcode || downstr == NULL) {
@@ -844,7 +845,7 @@ int performUpdate(progressbar_t* progbar, bool* restartNeeded) {
 	if (ciaFile) {
 		amInit();
 		AM_TitleEntry manInfo = { 0 };
-		u64 tid = CTGP7_TID;
+		u64 tid = MK7DX_TID;
 		AM_GetTitleInfo(MEDIATYPE_SD, 1, &tid, &manInfo);
 		if (manInfo.size > 0) {
 			Handle handle;
@@ -943,7 +944,7 @@ brewinstall:
 		fclose(brewFile);
 		*restartNeeded = true;
 	}
-	FILE* file = fopen("/CTGP-7/config/version.bin", "w");
+	FILE* file = fopen("/MK7DX/config/version.bin", "w");
 	fwrite(versionList[index - 1], 1, strlen(versionList[index - 1]), file);
 	fclose(file);
 	progbar->isHidden = true;

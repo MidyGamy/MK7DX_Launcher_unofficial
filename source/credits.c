@@ -12,7 +12,7 @@ extern sprite_t         *topInfoSprite;
 
 char* tryDownloadCredits() {
 	char* ret = NULL;
-	downloadString("https://raw.githubusercontent.com/mariohackandglitch/CTGP-7updates/master/credits.txt", &ret); //Put the correct URL
+	downloadString("https://raw.githubusercontent.com/MidyGamy/MK7DX-updates-unofficial/master/credits.txt", &ret); //Put the correct URL
 	return ret;
 }
 

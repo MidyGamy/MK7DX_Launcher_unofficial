@@ -191,7 +191,7 @@ void UpdaterMenuLoop() {
 						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "0x%08X", ret);
 						newAppTopMultiline(DEFAULT_COLOR, SMALL | CENTER, CURL_lastErrorCode);
 						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nYou can ask for help in the");
-						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "CTGP-7 discord server.");
+						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "MK7DX discord server.");
 					} else if (ret) {
 						restartneeded = true;
 						newAppTop(COLOR_RED, MEDIUM | BOLD | CENTER, "Update Failed");
@@ -199,7 +199,7 @@ void UpdaterMenuLoop() {
 						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "the following error code:");
 						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\n0x%08X\n", ret);
 						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "You can ask for help in the");
-						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "CTGP-7 discord server.");
+						newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "MK7DX discord server.");
 					}
 					else {
 						if (g_ciaInstallFailed) {

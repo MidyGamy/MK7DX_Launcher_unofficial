@@ -50,24 +50,26 @@ typedef uint8_t   u8;
 #define LOAD_FAILED                 (char *)s_error[17]
 #define NTR_ALREADY_LAUNCHED        (char *)s_error[18]
 
-#define DEFAULT_MOD_PATH "/CTGP-7"
-#define FILE_DOWN_PREFIX "https://github.com/mariohackandglitch/CTGP-7updates/raw/master/updates/data"
+#define DEFAULT_MOD_PATH "/MK7DX"
+#define FILE_DOWN_PREFIX "https://github.com/MidyGamy/MK7DX-updates-unofficial/raw/master/updates/data"
 #define FULLMOD_DOWNLOAD_URL_CIA "https://ctgp7.page.link/cia_install"
 #define FULLMOD_DOWNLOAD_URL_3DSX  "https://ctgp7.page.link/3dsx_install"
-#define FULLMOD_DOWNLOAD_FINAL_CIA "/CTGP-7tmp/CTGP-7_Installer.cia"
-#define FULLMOD_DOWNLOAD_FINAL_3DSX  "/CTGP-7tmp/CTGP-7_Installer.3dsx"
+// #define FULLMOD_DOWNLOAD_URL_CIA "https://MK7DX.page.link/cia_install"
+// #define FULLMOD_DOWNLOAD_URL_3DSX  "https://MK7DX.page.link/3dsx_install"
+#define FULLMOD_DOWNLOAD_FINAL_CIA "/MK7DX-tmp/MK7DX_Installer.cia"
+#define FULLMOD_DOWNLOAD_FINAL_3DSX  "/MK7DX-tmp/MK7DX_Installer.3dsx"
 
-#define TOINSTALL_CIA_PATH "/CTGP-7/cia/tooInstall.cia"
-#define TOINSTALL_3DSX_PATH "/CTGP-7/cia/tooInstall.3dsx"
-#define FINAL_CIA_PATH "/CTGP-7/cia/CTGP-7.cia"
-#define TEMPORAL_3DSX_PATH "/CTGP-7/cia/CTGP-7.3dsx"
-#define FINAL_3DSX_PATH "/3ds/CTGP-7/CTGP-7.3dsx"
-#define FINAL_3DSX_INSTALLER_PATH "/3ds/CTGP-7/CTGP-7_Installer.3dsx"
-#define LAUNCH_OPT_SAVE "/CTGP-7/config/launchopt.bin"
-#define PLGLDR_TMP "/CTGP-7/tempboot.firm"
-#define PLGLDR_URL "https://raw.githubusercontent.com/mariohackandglitch/CTGP-7updates/master/luma/boot.firm"
+#define TOINSTALL_CIA_PATH "/MK7DX/cia/tooInstall.cia"
+#define TOINSTALL_3DSX_PATH "/MK7DX/cia/tooInstall.3dsx"
+#define FINAL_CIA_PATH "/MK7DX/cia/MK7DX.cia"
+#define TEMPORAL_3DSX_PATH "/MK7DX/cia/MK7DX.3dsx"
+#define FINAL_3DSX_PATH "/3ds/MK7DX/MK7DX.3dsx"
+#define FINAL_3DSX_INSTALLER_PATH "/3ds/MK7DX/MK7DX_Installer.3dsx"
+#define LAUNCH_OPT_SAVE "/MK7DX/config/launchopt.bin"
+#define PLGLDR_TMP "/MK7DX/tempboot.firm"
+#define PLGLDR_URL "https://raw.githubusercontent.com/MidyGamy/MK7DX-updates-unofficial/master/luma/boot.firm"
 #define PLGLDR_PATH "romfs:/boot.firm"
-#define CTGP7_TID (0x0004000003070C00ULL)
+#define MK7DX_TID (0x000400000138F700ULL)
 #define CIA_ALREADY_EXISTS 0xC8E083FC
 
 typedef struct  updateData_s

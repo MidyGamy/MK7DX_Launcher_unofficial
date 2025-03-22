@@ -70,7 +70,7 @@ void launchPluginLoader(TitleWithUpd_t* tinfo) {
 	u8 isPlgEnabled = 0;
 	plgparam.noFlash = true;
 	plgparam.lowTitleId = (u32)tinfo->game.titleID;
-	strcpy(plgparam.path, "/CTGP-7/resources/CTGP-7.3gx");
+	strcpy(plgparam.path, "/MK7DX/resources/MK7DX.3gx");
 	//
 	LaunchSettings_t* launchSettings = (LaunchSettings_t*)&(plgparam.config[0]);
 	switch ((u32)tinfo->game.titleID)
@@ -123,7 +123,7 @@ bool checkPlgLdr() {
 		bool updatelumaloop = true;
 		u32 keys = 0;
 		clearTop();
-		newAppTop(COLOR_RED, BOLD | MEDIUM | CENTER, "Cannot launch CTGP-7");
+		newAppTop(COLOR_RED, BOLD | MEDIUM | CENTER, "Cannot launch MK7DX");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nLuma3DS with plugin loader");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "is not installed. Would you");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "like to install it? Info:"); 
@@ -142,7 +142,7 @@ bool checkPlgLdr() {
 					bool performupdatelumaloop = true;
 					int keys2 = 0;
 					clearTop();
-					newAppTop(COLOR_RED, BOLD | MEDIUM | CENTER, "Cannot launch CTGP-7");
+					newAppTop(COLOR_RED, BOLD | MEDIUM | CENTER, "Cannot launch MK7DX");
 					newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nLuma3DS with plugin loader");
 					newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "failed to download. Please,");
 					newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "update manually.");
@@ -441,7 +441,7 @@ void launchMod() {
 		bool errorloop = true;
 		u32 keys = 0;
 		clearTop();
-		newAppTop(COLOR_RED, MEDIUM | BOLD | CENTER, "Failed to launch CTGP-7");
+		newAppTop(COLOR_RED, MEDIUM | BOLD | CENTER, "Failed to launch MK7DX");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "Mario Kart 7 was not detected.");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "\nIf you are playing");
 		newAppTop(DEFAULT_COLOR, MEDIUM | CENTER, "from cartridge make sure");
