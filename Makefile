@@ -13,7 +13,7 @@ endif
 # COMMON CONFIGURATION #
 
 
-LAUNCHER_M = 1
+LAUNCHER_M = 0
 
 ifeq ($(LAUNCHER_M), 1)
 	NAME := MK7DX
@@ -33,12 +33,12 @@ LIBRARIES := citro3d ctru png z m curl mbedtls mbedx509 mbedcrypto cwav ncsnd
 
 ifeq ($(LAUNCHER_M), 1)
 	VERSION_MAJOR := 1
-	VERSION_MINOR := 3
-	VERSION_MICRO := 2
+	VERSION_MINOR := 0
+	VERSION_MICRO := 0
 else
 	VERSION_MAJOR := 1
 	VERSION_MINOR := 0
-	VERSION_MICRO := 1
+	VERSION_MICRO := 0
 endif
 
 BUILD_FLAGS := -march=armv6k -mtune=mpcore -mfloat-abi=hard
@@ -75,7 +75,7 @@ ifeq ($(TARGET),3DS)
     LIBRARIES += citro3d ctru png z m curl mbedtls mbedx509 mbedcrypto
 
     PRODUCT_CODE := CTR-P-MK7DX
-    UNIQUE_ID := 0x3070C
+    UNIQUE_ID := 0xAFC21
 
     CATEGORY := Application
     USE_ON_SD := true
